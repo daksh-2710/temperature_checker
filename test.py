@@ -1,2 +1,0 @@
-print("sdfsdzf")
-print("yesssssssssssshhhhhhhhhhhhhhh")
