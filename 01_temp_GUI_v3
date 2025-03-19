@@ -79,6 +79,9 @@ class Converter():
         #reset lebel and entry box (if we have a new error)
         self.answer_error.config(fg = "#004C99")
         self.temp_entry.config(bg = "#FFFFFF")
+
+        error = f"Enter a number more than / equal to {min_temp}"
+        has_errors = "no"
    
         #checks that amount to be converted is a valid number above absolute zero
         try:
@@ -92,7 +95,7 @@ class Converter():
         except ValueError:
             error = "Please enter a number"
 
-        if error != "":
+        if has_errors == "yes":
             self.answer_error.config(text = error, fg = "#9C0000")
             self.temp_entry.config(bg = "#F4CCCC")
             self.temp_entry.delete(0, END)
@@ -105,9 +108,6 @@ class Converter():
          
 
         
-
-
-
 
 
 #main routine
