@@ -37,7 +37,7 @@ class HistoryExport:
     """
     displays history dialogue box
     """
-    def __init__(self, partner):
+    def __init__(self, partner, calculations):
         #setup dialogue box and background colour
 
         green_back = "#D5E8D4"
