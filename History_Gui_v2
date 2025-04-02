@@ -1,6 +1,6 @@
 from tkinter import *
 from functools import partial #to prevent unwanted buttons
-
+import all_constants as c
 class Converter:
     """
     Temperature conversion tool (C to F or F to C)
@@ -11,9 +11,9 @@ class Converter:
         Temperature converter GUI
         """
 
-        self.all_calculations_list = ['10.0F is -12C', '20F is -7C',
-                                      '30F is -1C', '40F is 4C',
-                                      '50F is 10C', '60F is 16C']
+        self.all_calculations_list = ['10.0F is -12C','20F is -7C',
+                                      '30F is -1C','40F is 4C',
+                                      '50F is 10C','60F is 16C']
 
         self.temp_frame = Frame(padx = 10, pady = 10)
         self.temp_frame.grid()
@@ -38,10 +38,6 @@ class HistoryExport:
     displays history dialogue box
     """
     def __init__(self, partner, calculations):
-        #setup dialogue box and background colour
-
-        green_back = "#D5E8D4"
-        peach_back = "#ffe6cc"
 
         self.history_box = Toplevel()
 
@@ -56,10 +52,35 @@ class HistoryExport:
         self.history_frame = Frame(self.history_box)
         self.history_frame.grid()
 
+        #background colour and text for calculation area
+        if len(calculations) <= c.MAX_CALCS:
+               calc_back = "#D5E8D4"
+               calc_amount = "all your"
+        else:
+               calc_back = "#ffe6cc"
+               calc_amount = (f"your recent calculatuions - "
+                              f"showing  {c.MAX_CALCS} / {len(calculations)}")
+                       
         #strings for 'long' labels
-        recent_intro_txt = ("Below are your recent calculations - showing "
-                            "3 / 3 calculations. All calculations are "
-                            "shown to the nearest degree")
+        recent_intro_txt = (f"Below are {calc_amount} calculations "
+                            "(to the nearest degree)")
+        
+        #create string from calculations list (newest calculations first)
+        newest_first_string = ""
+        newest_first_list = list(reversed(calculations))
+
+        if len(newest_first_list) <= c.MAX_CALCS:
+             
+            for item in newest_first_list[-1]:
+                newest_first_string += item + "\n"
+
+            newest_first_string +=  newest_first_list[-1]
+        # if we have more than five items
+        else:
+            for item in newest_first_list[:c.MAX_CALCS-1]:
+                newest_first_string += item + "\n"
+
+            newest_first_string += newest_first_list[c.MAX_CALCS-1] 
 
         export_instructions_txt = ("Please push <Export> to save your calculations in text "
                                    "file. If the filename already exists, it will be replaced")
@@ -70,7 +91,7 @@ class HistoryExport:
         history_label_list = [
             ["History / Export", ("Arial", "16", "bold"), None],
             [recent_intro_txt, ("Arial", "11"), None],
-            ["calculation list", ("Arial", "14"), green_back],
+            [newest_first_string, ("Arial", "14"), calc_back],
             [export_instructions_txt, ("Arial", "11"), None]
         ]
 
@@ -91,8 +112,6 @@ class HistoryExport:
         self.hist_button_frame = Frame(self.history_box)
         self.hist_button_frame.grid(row = 4)
 
-        
-
         button_detail_list = [
             ["Export", "#004C99", "", 0, 0],
             ["Close", "#666666", partial(self.close_history, partner), 0, 1],
@@ -101,10 +120,10 @@ class HistoryExport:
         for btn in button_detail_list:
             self.make_button = Button(self.hist_button_frame,
                                       font = ("Arial", "12", "bold"),
-                                      text = btn[0], bg = [1],
+                                      text = btn[0], bg = btn[1],
                                       fg = "#FFFFFF", width = 12,
                                       command = btn[2])
-        self.make_button.grid(row = btn[3], column = btn[4], padx = 12, pady = 10)
+            self.make_button.grid(row = btn[3], column = btn[4], padx = 12, pady = 10)
 
     def close_history(self, partner):
         """
